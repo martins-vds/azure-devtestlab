@@ -1,9 +1,9 @@
 {
   "Labs": [
     {
-      "ResourceGroup": "<resource group name>",
-      "SubscriptionId": "<subscription ID that contains the lab>",
-      "LabName": "<Name of the DevTest Lab>",
+      "ResourceGroup": "<RESOURCE-GROUP>",
+      "SubscriptionId": "<SUBSCRIPTION-ID>",
+      "LabName": "<LAB-NAME>",
       "ImagePaths": [
         "Win2012R2/VS2015 Enterprise with Azure SDK.json",
         "Win2016"

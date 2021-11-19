@@ -1,11 +1,12 @@
 # Define some variables up fromt
-$subscriptionId = "<Subscription Id>"
-$devTestLabName = "<Name of the DevTest Lab>"
-$configurationFilesLocation = "<Local Directory that contains the configuration files>"
-$virtualmachineUsername = "adminuser"
-$virtualmachinePassword = "<a strong password>"
+$tenantId = ""
+$subscriptionId = ""
+$devTestLabName = "ImageFactory"
+$configurationFilesLocation = ""
+$virtualmachineUsername = "labuser"
+$virtualmachinePassword = ""
 
-Add-AzureRmAccount
+Add-AzureRmAccount -TenantId $tenantId  
 Select-AzureRmSubscription -SubscriptionId $subscriptionId
 
 # Scrape source code control for json files + create all VMs discovered
@@ -15,7 +16,7 @@ Select-AzureRmSubscription -SubscriptionId $subscriptionId
                             -machinePassword (ConvertTo-SecureString -String "$virtualmachinePassword" `
                             -AsPlainText -Force) `
                             -StandardTimeoutMinutes 60 `
-                            -vmSize "Standard_A2"
+                            -vmSize "Standard_DS2_v2"
 
 # For all running VMs, save as images
 .\SnapImagesFromVMs.ps1 -DevTestLabName $devTestLabName

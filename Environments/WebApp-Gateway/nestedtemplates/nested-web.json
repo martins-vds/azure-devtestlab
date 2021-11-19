@@ -1,0 +1,109 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "contains the resourceId of the VNet to which the site will be bound"
+            }
+        },
+        "certThumbprint": {
+            "type": "string",
+            "metadata": {
+                "description": "contains the thumbprint for the certificate"
+            }
+        },
+        "certBlob": {
+            "type": "string",
+            "metadata": {
+                "description": "contains the base64 of the certificate"
+            }
+        },
+        "purpose": {
+            "type": "string"
+        },
+        "environment": {
+            "type": "string",
+            "allowedValues": [
+                "prod",
+                "qa",
+                "test",
+                "dev"
+            ],
+            "defaultValue": "dev"
+        }
+    },
+    "variables": {
+        "resourceNamePrefix": "[take(uniqueString(resourceGroup().id), 3)]",
+        "hostingPlanName": "[toLower(concat(variables('resourceNamePrefix'), '-', take(uniqueString(resourceGroup().id), 6), '-sp'))]",
+        "siteName": "[toLower(concat(variables('resourceNamePrefix'), '-', take(uniqueString(resourceGroup().id), 6)))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2016-09-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environment')]",
+                "purpose": "[parameters('purpose')]"
+            },
+            "properties": {
+                "name": "[variables('hostingPlanName')]",
+                "workerSize": "1",
+                "hostingEnvironment": "",
+                "numberOfWorkers": 0
+            },
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S"
+            }
+        },
+        {
+            "name": "[variables('siteName')]",
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2015-02-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "[parameters('environment')]",
+                "purpose": "[parameters('purpose')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+            ],
+            "properties": {
+                "enabled": true,
+                "name": "[variables('siteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "hostingEnvironment": "",
+                "reserved": false,
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "hostNamesDisabled": false,
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/virtualNetworkConnections",
+            "apiVersion": "2016-08-01",
+            "name": "[concat(variables('siteName'), '/shared-vnet')]",
+            "location": "East US 2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('siteName'))]"
+            ],
+            "properties": {
+                "vnetResourceId": "[parameters('vnetId')]",
+                "certThumbprint": "[parameters('certThumbprint')]",
+                "certBlob": "[parameters('certBlob')]",
+                "resyncRequired": false,
+                "isSwift": false
+            }
+        }
+    ]
+}
