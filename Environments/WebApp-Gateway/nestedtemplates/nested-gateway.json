@@ -47,7 +47,7 @@
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworkGateways",
-            "apiVersion": "2021-05-01",
+            "apiVersion": "2020-11-01",
             "name": "[parameters('name')]",
             "location": "[resourceGroup().location]",
             "tags": {
@@ -82,7 +82,7 @@
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2021-05-01",
+            "apiVersion": "2020-11-01",
             "name": "[parameters('newPublicIpAddressName')]",
             "location": "[resourceGroup().location]",
             "tags": {

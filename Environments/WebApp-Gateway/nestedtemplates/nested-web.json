@@ -8,17 +8,8 @@
                 "description": "contains the resourceId of the VNet to which the site will be bound"
             }
         },
-        "certThumbprint": {
-            "type": "string",
-            "metadata": {
-                "description": "contains the thumbprint for the certificate"
-            }
-        },
-        "certBlob": {
-            "type": "string",
-            "metadata": {
-                "description": "contains the base64 of the certificate"
-            }
+        "vnetSubnetName": {
+            "type": "string"            
         },
         "purpose": {
             "type": "string"
@@ -91,15 +82,12 @@
             "type": "Microsoft.Web/sites/virtualNetworkConnections",
             "apiVersion": "2021-02-01",
             "name": "[concat(variables('siteName'), '/shared-vnet')]",
-            "location": "East US 2",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('siteName'))]"
             ],
             "properties": {
-                "vnetResourceId": "[parameters('vnetId')]",
-                "certThumbprint": "[parameters('certThumbprint')]",
-                "certBlob": "[parameters('certBlob')]",
-                "resyncRequired": false,
+                "vnetResourceId": "[concat(parameters('vnetId'),'/subnets/',parameters('vnetSubnetName'))]",
                 "isSwift": false
             }
         }
