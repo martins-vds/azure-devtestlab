@@ -44,7 +44,7 @@
     "resources": [
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2020-10-01",
             "name": "Network",
             "properties": {
                 "mode": "Incremental",
@@ -70,7 +70,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2020-10-01",
             "name": "NetworkGateway",
             "dependsOn": [
                 "Microsoft.Resources/deployments/Network"
@@ -97,9 +97,6 @@
                     "subnetId": {
                         "value": "[reference('Network').outputs.GatewaySubnetId.value]"
                     },
-                    "vnetSegmentPrefix": {
-                        "value": "[parameters('vnetSegmentPrefix')]"
-                    },
                     "newPublicIpAddressName": {
                         "value": "[concat(parameters('virtualNetworkName'), '-pip')]"
                     },
@@ -114,7 +111,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2021-01-01",
+            "apiVersion": "2020-10-01",
             "name": "NetworkGatewayWeb",
             "dependsOn": [
                 "Microsoft.Resources/deployments/NetworkGateway"
@@ -137,6 +134,9 @@
                     },
                     "purpose": {
                         "value": "[parameters('purpose')]"
+                    },
+                    "certThumbprint": {
+                        "value": "[reference('NetworkGateway').outputs.certThumbprint.value]"
                     }
                 }
             }
