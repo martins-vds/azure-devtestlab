@@ -23,6 +23,10 @@
                 "dev"
             ],
             "defaultValue": "dev"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "variables": {
@@ -35,7 +39,7 @@
             "name": "[variables('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2021-02-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "environment": "[parameters('environment')]",
                 "purpose": "[parameters('purpose')]"
@@ -56,7 +60,8 @@
             "name": "[variables('siteName')]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-02-01",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
+            "kind": "app",
             "tags": {
                 "environment": "[parameters('environment')]",
                 "purpose": "[parameters('purpose')]"
@@ -75,14 +80,15 @@
                 "hostNamesDisabled": false,
                 "containerSize": 0,
                 "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false
+                "httpsOnly": false,
+                "virtualNetworkSubnetId": "[concat(parameters('vnetId'),'/subnets/',parameters('vnetSubnetName'))]"
             }
         },
         {
             "type": "Microsoft.Web/sites/virtualNetworkConnections",
             "apiVersion": "2021-02-01",
             "name": "[concat(variables('siteName'), '/shared-vnet')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('siteName'))]"
             ],

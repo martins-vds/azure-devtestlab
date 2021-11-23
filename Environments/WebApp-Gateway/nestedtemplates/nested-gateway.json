@@ -42,6 +42,10 @@
                 "dev"
             ],
             "defaultValue": "dev"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "resources": [
@@ -49,7 +53,7 @@
             "type": "Microsoft.Network/virtualNetworkGateways",
             "apiVersion": "2020-11-01",
             "name": "[parameters('name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "environment": "[parameters('environment')]",
                 "purpose": "[parameters('purpose')]"
@@ -84,7 +88,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
             "name": "[parameters('newPublicIpAddressName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "environment": "[parameters('environment')]",
                 "purpose": "[parameters('purpose')]"

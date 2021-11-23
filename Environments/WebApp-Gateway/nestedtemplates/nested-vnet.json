@@ -25,6 +25,10 @@
                 "dev"
             ],
             "defaultValue": "dev"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
         }
     },
     "variables": {},
@@ -33,7 +37,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
             "name": "[parameters('virtualNetworkName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": {
                 "environment": "[parameters('environment')]",
                 "purpose": "[parameters('purpose')]"
@@ -46,23 +50,23 @@
                 },
                 "subnets": [
                     {
-                        "name": "default",
+                        "name": "GatewaySubnet",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.0.0/22')]",
+                            "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.4.0/24')]",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
                         }
                     },
                     {
-                        "name": "GatewaySubnet",
+                        "name": "default",
                         "properties": {
-                            "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.4.0/24')]",
-                            "serviceEndpoints": [
+                            "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.0.0/22')]",
+                            "delegations": [
                                 {
-                                    "service": "Microsoft.Web",
-                                    "locations": [
-                                        "*"
-                                    ]
+                                    "name": "delegation",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverfarms"
+                                    }
                                 }
                             ],
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -86,6 +90,14 @@
             ],
             "properties": {
                 "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.0.0/22')]",
+                "delegations": [
+                    {
+                        "name": "delegation",
+                        "properties": {
+                            "serviceName": "Microsoft.Web/serverfarms"
+                        }
+                    }
+                ],
                 "privateEndpointNetworkPolicies": "Enabled",
                 "privateLinkServiceNetworkPolicies": "Enabled"
             }
@@ -103,14 +115,6 @@
             ],
             "properties": {
                 "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.4.0/24')]",
-                "serviceEndpoints": [
-                    {
-                        "service": "Microsoft.Web",
-                        "locations": [
-                            "*"
-                        ]
-                    }
-                ],
                 "privateEndpointNetworkPolicies": "Enabled",
                 "privateLinkServiceNetworkPolicies": "Enabled"
             }

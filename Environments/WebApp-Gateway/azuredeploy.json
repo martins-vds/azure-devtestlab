@@ -127,16 +127,13 @@
                         "value": "[reference('Network').outputs.vnetEnvironmentId.value]"
                     },
                     "vnetSubnetName": {
-                        "value": "[reference('Network').outputs.subnetVMName.value]"
+                        "value": "[reference('Network').outputs.defaultSubnetName.value]"
                     },
                     "environment": {
                         "value": "[parameters('environment')]"
                     },
                     "purpose": {
                         "value": "[parameters('purpose')]"
-                    },
-                    "certThumbprint": {
-                        "value": "[reference('NetworkGateway').outputs.certThumbprint.value]"
                     }
                 }
             }
