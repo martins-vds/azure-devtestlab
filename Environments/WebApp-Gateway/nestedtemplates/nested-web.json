@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vnetId": {
@@ -43,7 +43,7 @@
         {
             "name": "[variables('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2016-09-01",
+            "apiVersion": "2021-02-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "environment": "[parameters('environment')]",
@@ -52,7 +52,6 @@
             "properties": {
                 "name": "[variables('hostingPlanName')]",
                 "workerSize": "1",
-                "hostingEnvironment": "",
                 "numberOfWorkers": 0
             },
             "sku": {
@@ -65,7 +64,7 @@
         {
             "name": "[variables('siteName')]",
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2015-02-01",
+            "apiVersion": "2021-02-01",
             "location": "[resourceGroup().location]",
             "tags": {
                 "environment": "[parameters('environment')]",
@@ -78,7 +77,6 @@
                 "enabled": true,
                 "name": "[variables('siteName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "hostingEnvironment": "",
                 "reserved": false,
                 "scmSiteAlsoStopped": false,
                 "clientAffinityEnabled": true,
@@ -91,7 +89,7 @@
         },
         {
             "type": "Microsoft.Web/sites/virtualNetworkConnections",
-            "apiVersion": "2016-08-01",
+            "apiVersion": "2021-02-01",
             "name": "[concat(variables('siteName'), '/shared-vnet')]",
             "location": "East US 2",
             "dependsOn": [
