@@ -50,11 +50,7 @@
                         "properties": {
                             "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.0.0/22')]",
                             "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
-                            "tags": {
-                                "environment": "[parameters('environment')]",
-                                "purpose": "[parameters('purpose')]"
-                            }
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
                     },
                     {
