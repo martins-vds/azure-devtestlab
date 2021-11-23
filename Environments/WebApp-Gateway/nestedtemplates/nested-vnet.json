@@ -31,7 +31,7 @@
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2020-11-01",
             "name": "[parameters('virtualNetworkName')]",
             "location": "[resourceGroup().location]",
             "tags": {
@@ -50,7 +50,11 @@
                         "properties": {
                             "addressPrefix": "[concat(parameters('vnetSegmentPrefix'), '.0.0/22')]",
                             "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "tags": {
+                                "environment": "[parameters('environment')]",
+                                "purpose": "[parameters('purpose')]"
+                            }
                         }
                     },
                     {
@@ -76,7 +80,7 @@
         },
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2020-11-01",
             "name": "[concat(parameters('virtualNetworkName'), '/default')]",
             "tags": {
                 "environment": "[parameters('environment')]",
@@ -93,7 +97,7 @@
         },
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2021-03-01",
+            "apiVersion": "2020-11-01",
             "name": "[concat(parameters('virtualNetworkName'), '/GatewaySubnet')]",
             "tags": {
                 "environment": "[parameters('environment')]",
