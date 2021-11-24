@@ -67,7 +67,7 @@
                 "purpose": "[parameters('purpose')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+                "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
             ],
             "properties": {
                 "enabled": true,
