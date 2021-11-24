@@ -81,10 +81,6 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-11-01",
             "name": "[concat(parameters('virtualNetworkName'), '/default')]",
-            "tags": {
-                "environment": "[parameters('environment')]",
-                "purpose": "[parameters('purpose')]"
-            },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
             ],
@@ -106,10 +102,6 @@
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2020-11-01",
             "name": "[concat(parameters('virtualNetworkName'), '/GatewaySubnet')]",
-            "tags": {
-                "environment": "[parameters('environment')]",
-                "purpose": "[parameters('purpose')]"
-            },
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
             ],
