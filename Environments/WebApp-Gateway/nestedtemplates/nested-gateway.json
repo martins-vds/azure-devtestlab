@@ -50,6 +50,19 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('newPublicIpAddressName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "environment": "[parameters('environment')]",
+                "purpose": "[parameters('purpose')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
             "type": "Microsoft.Network/virtualNetworkGateways",
             "apiVersion": "2020-11-01",
             "name": "[parameters('name')]",
@@ -59,7 +72,7 @@
                 "purpose": "[parameters('purpose')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
             ],
             "properties": {
                 "gatewayType": "[parameters('gatewayType')]",
@@ -72,7 +85,7 @@
                                 "id": "[parameters('subnetId')]"
                             },
                             "publicIpAddress": {
-                                "id": "[resourceId('DevTestLab', 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                             }
                         }
                     }
@@ -82,19 +95,6 @@
                     "name": "[parameters('sku')]",
                     "tier": "[parameters('sku')]"
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2020-11-01",
-            "name": "[parameters('newPublicIpAddressName')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "environment": "[parameters('environment')]",
-                "purpose": "[parameters('purpose')]"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic"
             }
         }
     ]
